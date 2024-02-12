@@ -2,7 +2,9 @@ interface Constructor<T> {
     new(...args: unknown[]): T;
 }
 
-type Component = { entity?: Entity; };
+interface Component {
+    entity?: Entity;
+};
 
 interface Entity {
     get id(): number;
@@ -13,8 +15,9 @@ interface Entity {
 };
 
 interface Scene {
-    world?: Wrapper;
+    wrapper?: Wrapper;
     add(...components: Component[]): Entity;
+    iterate(): Generator<Entity, void, unknown>;
     query(id: number): Entity | undefined;
     destroy(id: number): this;
 }
@@ -25,3 +28,11 @@ interface Wrapper {
 
 type System = (s: Scene) => void;
 type Stepper = (w: Wrapper) => void;
+
+type UpdateDelta = {
+    update: number;
+}
+
+type RenderDelta = {
+    render: number;
+};
