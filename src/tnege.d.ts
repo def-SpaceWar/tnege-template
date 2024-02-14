@@ -29,10 +29,10 @@ interface Wrapper {
 type System = (s: Scene) => void;
 type Stepper = (w: Wrapper) => void;
 
-type UpdateDelta = {
-    update: number;
+type Delta = {
+    dt: number;
 }
 
-type RenderDelta = {
-    render: number;
-};
+type ReadonlyDelta = {
+    readonly dt: number;
+}

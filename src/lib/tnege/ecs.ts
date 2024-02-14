@@ -68,9 +68,7 @@ class _S implements Scene {
     }
 };
 
-export function createScene() {
-    return new _S();
-}
+export const createScene = () => new _S() as Scene;
 
 export function createStepper(...systems: System[]): Stepper {
     const size = systems.length;

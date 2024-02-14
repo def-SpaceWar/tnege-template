@@ -3,16 +3,23 @@ export class Name implements Component {
     constructor(public name: string) { }
 }
 
-export function createUpdateLoop(f: () => void, deltas?: UpdateDelta): [updateLoop: (ms: number) => Promise<void>, stopUpdateLoop: () => void] {
+export function createDelta() {
+    return { dt: 0 } as ReadonlyDelta;
+}
+
+export function createUpdateLoop(
+    f: () => void,
+    delta?: Delta
+): [updateLoop: (ms: number) => Promise<void>, stopUpdateLoop: () => void] {
     let resolve: () => void;
     const promise = new Promise<void>(res => resolve = res),
-        updateLoop = deltas
+        updateLoop = delta
             ? async (ms: number) => {
                 let before = performance.now() / 1000;
                 const interval = setInterval(() => {
                     f();
                     const now = performance.now() / 1000;
-                    deltas.update = now - before;
+                    delta.dt = now - before;
                     before = now;
                 }, ms);
                 await promise;
@@ -27,17 +34,20 @@ export function createUpdateLoop(f: () => void, deltas?: UpdateDelta): [updateLo
     return [updateLoop, stopUpdateLoop];
 }
 
-export function createRenderLoop(f: () => void, deltas?: RenderDelta): [renderLoop: () => Promise<void>, stopRenderLoop: () => void] {
+export function createRenderLoop(
+    f: () => void,
+    delta?: Delta
+): [renderLoop: () => Promise<void>, stopRenderLoop: () => void] {
     let resolve: () => void;
     const promise = new Promise<void>(res => resolve = res),
-        renderLoop = deltas
+        renderLoop = delta
             ? async () => {
                 let id = Infinity,
                     before = performance.now() / 1000;
                 const callback = () => {
                     f();
                     const now = performance.now() / 1000;
-                    deltas.render = now - before;
+                    delta.dt = now - before;
                     before = now;
                     id = requestAnimationFrame(callback);
                 };

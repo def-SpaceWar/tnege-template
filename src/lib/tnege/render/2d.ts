@@ -1,31 +1,42 @@
-function createWebGL2System(canvas: HTMLCanvasElement) {
-    const gl = canvas.getContext('webgl2');
-    if (!gl) alert("WebGL not loaded");
-    //
-}
-
-class Rectangle implements Component {
+export class Transform2D implements Component {
     entity?: Entity;
     private arr: Float32Array;
 
-    constructor(x: number, y: number, w: number, h: number) {
-        this.arr = new Float32Array(4);
-        this.arr[0] = x;
-        this.arr[1] = y;
-        this.arr[2] = w;
-        this.arr[3] = h;
+    constructor(
+        a: number,
+        b: number,
+        c: number,
+        d: number,
+        e: number,
+        f: number
+    ) {
+        this.arr = new Float32Array([a, b, c, d, e, f]);
     }
 
-    get x() {}
-    get y() {}
-    get w() {}
-    get h() {}
+    get a() { return this.arr[0]; }
+    get b() { return this.arr[1]; }
+    get c() { return this.arr[2]; }
+    get d() { return this.arr[3]; }
+    get e() { return this.arr[4]; }
+    get f() { return this.arr[5]; }
+
+    set a(val: number) { this.arr[0] = val; }
+    set b(val: number) { this.arr[1] = val; }
+    set c(val: number) { this.arr[2] = val; }
+    set d(val: number) { this.arr[3] = val; }
+    set e(val: number) { this.arr[4] = val; }
+    set f(val: number) { this.arr[5] = val; }
 }
 
-function createCanvas2DRenderSystem(canvas: HTMLCanvasElement): System {
-    const ctx = canvas.getContext("2d");
-    if (!ctx) alert("Ctontext not loaded");
+export class Render2D implements Component {
+    entity?: Entity;
+    // TODO: implementation
+}
 
-   	return s => {
-   	};
+export function createCanvas2DRenderSystem(canvas: HTMLCanvasElement): System {
+    const ctx = canvas.getContext("2d");
+    if (!ctx) alert("Context not loaded");
+
+    return s => {
+    };
 }
